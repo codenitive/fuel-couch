@@ -39,13 +39,13 @@ class Client {
     public static function factory($name = null) {
         \Config::load('db', true);
 
-        if (\empty($name)) 
+        if (empty($name)) 
         {
             $active = \Config::get('db.active');
             $name = $active;
         }
 
-        if (!\isset(static::$instances[$name])) 
+        if (!isset(static::$instances[$name])) 
         {
             $config = \Config::get("db.{$name}");
 

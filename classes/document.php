@@ -24,7 +24,7 @@ use \couchDocument;
  */
 class Document {
 
-    private static $instances = array();
+    protected static $instances = array();
 
     /**
      * Accessing Couch Library:
@@ -41,13 +41,13 @@ class Document {
     public static function factory($name = null) {
         \Config::load('db', true);
 
-        if (\empty($name)) 
+        if (empty($name)) 
         {
             $active = \Config::get('db.active');
             $name = $active;
         }
         
-        if (!\isset(static::$instances[$name])) 
+        if (!isset(static::$instances[$name])) 
         {
         
             if (!$client = \Couch\Client::factory($name)) 
