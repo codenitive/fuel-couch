@@ -24,35 +24,47 @@ use \couchDocument;
  */
 class Document {
 
+    /**
+     * @staticvar   Cache all instances
+     */
     protected static $instances = array();
 
     /**
+     * Initiated once from \Fuel\Core\Autoloader
+     *
+     * @static
+     * @access  public
+     */
+    public static function _init() 
+    {
+        \Config::load('db', true);
+    }
+
+    /**
      * Accessing Couch Library:
-     * $db = \Couch\Document::factory();
+     * $db = \Couch\Document::forge();
      *
      * You can also make multiple connection by adding the connection name as a parameter
      * $name = 'qa';
-     * $db = \Couch\Document::factory($name);
+     * $db = \Couch\Document::forge($name);
      *
      * @access public
      * @param string $name
      * @return object couchDocument
      */
-    public static function factory($name = null) {
-        \Config::load('db', true);
-
+    public static function forge($name = null) 
+    {
         if (empty($name)) 
         {
-            $active = \Config::get('db.active');
-            $name = $active;
+            $name = \Config::get('db.active');
         }
         
         if (!isset(static::$instances[$name])) 
         {
         
-            if (!$client = \Couch\Client::factory($name)) 
+            if (!$client = \Couch\Client::forge($name)) 
             {
-                throw new \Fuel_Exception('Unable to initiate Couch\\Client');
+                throw new \Fuel_Exception("Unable to initiate Couch\\Client");
             }
             
             try 
@@ -61,11 +73,25 @@ class Document {
             }
             catch (\Fuel_Exception $e) 
             {
-                throw new \Fuel_Exception($e);
+                throw new \Fuel_Exception($e->getMessage());
             }
         }
         
         return static::$instances[$name];
+    }
+
+    /**
+     * Alias to self::forge()
+     *
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  object  \Couch\Document
+     * @see     self::forge()
+     */
+    public static function factory($name = null)
+    {
+        return static::forge($name);
     }
 
 }
