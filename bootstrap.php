@@ -11,6 +11,6 @@
  */
 
 Autoloader::add_classes(array(
-    'Couch\\Client'         => __DIR__.'/classes/client.php',
-    'Couch\\Document'       => __DIR__.'/classes/document.php',
+	'Couch\\Client'   => __DIR__.'/classes/client.php',
+	'Couch\\Document' => __DIR__.'/classes/document.php',
 ));

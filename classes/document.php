@@ -24,74 +24,91 @@ use \couchDocument;
  */
 class Document {
 
-    /**
-     * @staticvar   Cache all instances
-     */
-    protected static $instances = array();
+	/**
+	 * @staticvar   Cache all instances
+	 */
+	protected static $instances = array();
 
-    /**
-     * Initiated once from \Fuel\Core\Autoloader
-     *
-     * @static
-     * @access  public
-     */
-    public static function _init() 
-    {
-        \Config::load('db', true);
-    }
+	/**
+	 * Initiated once from \Fuel\Core\Autoloader
+	 *
+	 * @static
+	 * @access  public
+	 */
+	public static function _init() 
+	{
+		\Config::load('db', true);
+	}
 
-    /**
-     * Accessing Couch Library:
-     * $db = \Couch\Document::forge();
-     *
-     * You can also make multiple connection by adding the connection name as a parameter
-     * $name = 'qa';
-     * $db = \Couch\Document::forge($name);
-     *
-     * @access public
-     * @param string $name
-     * @return object couchDocument
-     */
-    public static function forge($name = null) 
-    {
-        if (empty($name)) 
-        {
-            $name = \Config::get('db.active');
-        }
-        
-        if (!isset(static::$instances[$name])) 
-        {
-        
-            if (!$client = \Couch\Client::forge($name)) 
-            {
-                throw new \Fuel_Exception("Unable to initiate Couch\\Client");
-            }
-            
-            try 
-            {
-                static::$instances[$name] = new \couchDocument($client);
-            }
-            catch (\Fuel_Exception $e) 
-            {
-                throw new \Fuel_Exception($e->getMessage());
-            }
-        }
-        
-        return static::$instances[$name];
-    }
+	/**
+	 * Accessing Couch Library:
+	 * $db = \Couch\Document::forge();
+	 *
+	 * You can also make multiple connection by adding the connection name as a parameter
+	 * $name = 'qa';
+	 * $db = \Couch\Document::forge($name);
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return object couchDocument
+	 */
+	public static function forge($name = null) 
+	{
+		if (empty($name)) 
+		{
+			$name = \Config::get('db.active');
+		}
+		
+		if ( ! isset(static::$instances[$name])) 
+		{
+		
+			if (($client = \Couch\Client::forge($name)) === false) 
+			{
+				throw new \FuelException(__METHOD__.": Unable to initiate Couch\\Client");
+			}
+			
+			try 
+			{
+				static::$instances[$name] = new \couchDocument($client);
+			}
+			catch (\FuelException $e) 
+			{
+				throw new \FuelException($e->getMessage());
+			}
+		}
+		
+		return static::$instances[$name];
+	}
 
-    /**
-     * Alias to self::forge()
-     *
-     * @static
-     * @access  public
-     * @param   string  $name
-     * @return  object  \Couch\Document
-     * @see     self::forge()
-     */
-    public static function factory($name = null)
-    {
-        return static::forge($name);
-    }
+	/**
+	 * Accessing Couch Library:
+	 * $db = \Couch\Document::make();
+	 *
+	 * You can also make multiple connection by adding the connection name as a parameter
+	 * $name = 'qa';
+	 * $db = \Couch\Document::make($name);
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return object couchDocument
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
+	}
+
+	/**
+	 * Alias to self::forge()
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  \Couch\Document
+	 * @see     self::forge()
+	 */
+	public static function factory($name = null)
+	{
+		return static::forge($name);
+	}
 
 }
