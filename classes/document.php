@@ -22,7 +22,8 @@ use \couchDocument;
  *
  * @author Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Document {
+class Document 
+{
 
 	/**
 	 * @staticvar   Cache all instances
@@ -62,7 +63,7 @@ class Document {
 		if ( ! isset(static::$instances[$name])) 
 		{
 		
-			if (($client = \Couch\Client::forge($name)) === false) 
+			if (($client = Client::make($name)) === false) 
 			{
 				throw new \FuelException(__METHOD__.": Unable to initiate Couch\\Client");
 			}

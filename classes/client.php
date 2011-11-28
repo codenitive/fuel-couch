@@ -20,7 +20,8 @@ use \couchClient;
  *
  * @author Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Client {
+class Client 
+{
 
 	/**
 	 * @staticvar   Cache all instances
