@@ -66,7 +66,7 @@ class Client {
 				throw new \FuelException(__METHOD__.": Unable to get configuration for {$name}");
 			}
 
-			if ('couch' === $config['type']) 
+			if ('couch' !== $config['type']) 
 			{
 				throw new \FuelException(__METHOD__.": Configuration is not meant for CouchDB");
 			}
